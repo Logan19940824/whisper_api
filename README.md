@@ -28,10 +28,27 @@ conda activate whisper_api
 
 # 安装 PyTorch CUDA 版本（先卸载 CPU 版本）
 pip uninstall torch torchaudio -y
-pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
+pip install torch torchaudio --extra-index-url https://download.pytorch.org/whl/cu121
 
 # 安装其他依赖
 pip install -r requirements.txt
+```
+
+### 国内镜像加速
+
+如遇安装慢，可使用国内镜像：
+
+```bash
+# 清华镜像
+pip install -r requirements.txt -i https://pypi.tuna.tsinghua.edu.cn/simple
+
+# 阿里云镜像
+pip install -r requirements.txt -i https://mirrors.aliyun.com/pypi/simple
+```
+
+**永久配置**：
+```bash
+pip config set global.index-url https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ## 快速启动
