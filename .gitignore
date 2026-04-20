@@ -1,0 +1,16 @@
+# Whisper models
+models/*.pt
+models/*.pth
+models/*.onnx
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+
+# Environment
+.env
+.env.local
