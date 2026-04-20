@@ -2,13 +2,39 @@
 
 基于 OpenAI Whisper 的本地语音转文字 API 服务。
 
-## 快速启动
+## 环境配置
 
-### 1. 安装依赖
+### 使用 venv（推荐）
 
 ```bash
-pip3 install -r requirements.txt
+# 创建虚拟环境
+python3 -m venv venv
+
+# 激活虚拟环境
+source venv/bin/activate
+
+# 安装依赖
+pip install -r requirements.txt
 ```
+
+### 使用 conda
+
+```bash
+# 创建 conda 环境（Python 3.9）
+conda create -n whisper_api python=3.9
+
+# 激活环境
+conda activate whisper_api
+
+# 安装 PyTorch CUDA 版本（先卸载 CPU 版本）
+pip uninstall torch torchaudio -y
+pip install torch torchaudio --index-url https://download.pytorch.org/whl/cu121
+
+# 安装其他依赖
+pip install -r requirements.txt
+```
+
+## 快速启动
 
 ### 2. 启动服务
 
@@ -20,16 +46,24 @@ python3 index.py
 
 ## API 接口
 
-### 健康检查
+### 健康检查（无需认证）
 
 ```bash
 curl http://localhost:8000/health
 ```
 
+**注意**：除健康检查外，所有接口都需要在 Header 中携带 `Authorization: Bearer <token>`
+
+可用 token：
+- `sk_wh1sper_a1b2c3d4e5f6g7h8i9j0k1l2m3`
+- `sk_wh1sper_n1o2p3q4r5s6t7u8v9w0x1y2z3a4`
+- `sk_wh1sper_b1c2d3e4f5g6h7i8j9k0l1m2n3o4`
+
 ### 同步转录（Base64）
 
 ```bash
 curl -X POST http://localhost:8000/v1/transcribe \
+  -H "Authorization: Bearer sk_wh1sper_a1b2c3d4e5f6g7h8i9j0k1l2m3" \
   -H "Content-Type: application/json" \
   -d '{"audio": "<base64音频数据>", "model": "base"}'
 ```
@@ -38,6 +72,7 @@ curl -X POST http://localhost:8000/v1/transcribe \
 
 ```bash
 curl -X POST http://localhost:8000/v1/transcribe/async \
+  -H "Authorization: Bearer sk_wh1sper_a1b2c3d4e5f6g7h8i9j0k1l2m3" \
   -F "file=@audio.mp3" \
   -F "model=base"
 ```
@@ -46,6 +81,7 @@ curl -X POST http://localhost:8000/v1/transcribe/async \
 
 ```bash
 curl -X POST http://localhost:8000/v1/transcribe/async \
+  -H "Authorization: Bearer sk_wh1sper_a1b2c3d4e5f6g7h8i9j0k1l2m3" \
   -F "audio=<base64音频数据>" \
   -F "model=base"
 ```
@@ -53,7 +89,8 @@ curl -X POST http://localhost:8000/v1/transcribe/async \
 ### 查询异步任务结果
 
 ```bash
-curl http://localhost:8000/v1/transcribe/result/<task_id>
+curl http://localhost:8000/v1/transcribe/result/<task_id> \
+  -H "Authorization: Bearer sk_wh1sper_a1b2c3d4e5f6g7h8i9j0k1l2m3"
 ```
 
 ## 模型选择
